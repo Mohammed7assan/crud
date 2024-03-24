@@ -22,10 +22,12 @@ import {
   Select,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Padding } from "@mui/icons-material";
 const intialvalue = {
   Category: "",
   subCategory: "",
@@ -74,14 +76,18 @@ const Home = () => {
   
   return (
     <>
+    <Typography>
+      <box sx={{
+                    "& > :not(style)": { m: 2, width: "100ch" },
+                  }}>  
       <div className="col-md-8">
         <br></br>
-        <div className="row">
+        <div className="row"  >
           <Link className="nav-link" to="add">
             <Button
               color="primary"
               variant="contained"
-              style={{ marginRight: 10 }}
+              style={{ marginRight: 30, marginLeft:20 }}
             >
               Add
             </Button>
@@ -89,7 +95,7 @@ const Home = () => {
         </div>
         <div className="row">
           <FormControl>
-            <FormLabel id="demo-row-radio-buttons-group-label">
+            <FormLabel id="demo-row-radio-buttons-group-label" >
               Search
             </FormLabel>
             <RadioGroup
@@ -173,6 +179,8 @@ const Home = () => {
         </div>
         <br />
       </div>
+      </box>
+      </Typography>
       {/* //////////// */}
       <br />
       <TableContainer component={Paper}>

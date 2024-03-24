@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -16,7 +16,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const intialvalue = {
+let intialvalue = {
   Category: "",
   subCategory: "",
   priority: "",
@@ -24,9 +24,11 @@ const intialvalue = {
   Requester: "",
   SRNumber: "",
 };
+
 const Add = () => {
   const navigate = useNavigate();
-  const [err, setError] = useState("");
+  const [errors, setErrors] = useState({});
+
 
   const [user, setUser] = useState(intialvalue);
   const { Category, subCategory, priority, Agent, Requester, SRNumber } = user;
@@ -36,27 +38,43 @@ const Add = () => {
 
   const adduserFun = (e) => {
     e.preventDefault();
-
+  
     axios.post(`http://localhost:5000/user`, user).then((data) => {
       console.log(data);
       toast.success("تم الأضافة بنجاح");
     });
     setUser(intialvalue);
-      setError("");
     //navigate("/");
   };
+  async function formRegister(values) {
+    console.log(values);
+
+    return axios.post("http://localhost:5000/user", values).then((data) => {
+      console.log(data);
+      toast.success("تم الأضافة بنجاح");
+        console.log(intialvalue);
+        setUser(intialvalue);
+        navigate('/');
+      }).catch((err) => {
+        console.log(err);
+        setErrors(err.response.data.message)
+      })
+
+  }
+
   const schema = Yup.object({
-    Category: Yup.string().required("Category is required"),
-    subCategory: Yup.string().required("subCategory is required"),
-    priority: Yup.string().required("priority is required"),
-    Agent: Yup.string().required("Agent is required"),
-    Requester: Yup.string().required("Requester is required"),
-    SRNumber: Yup.string().required("SRNumber is required"),
+    Category: Yup.string().required("يرجى إدخال التصنيف"),
+     subCategory: Yup.string().required(" يرجى إدخال التصنيف الفرعى"),
+     Agent: Yup.string().required("يرجى إدخال العميل "),
+     SRNumber: Yup.string().required("يرجى ادخال رقم الطلب "),
   });
   const formik = useFormik({
     initialValues: intialvalue,
     validationSchema: schema,
-    onSubmit: adduserFun,
+    onSubmit: (values) => {
+      formRegister(values)
+    }
+
   });
   return (
     <>
@@ -67,20 +85,15 @@ const Add = () => {
         <div className="row">
           <div className="col-md-6">
             <TextField
+            
               label="Category"
               id="Category"
               name="Category"
-              value={Category}
-              onChange={(e) => {
-                onvalueChange(e);
-              }}
+              value={formik.values.Category}
+              onChange={formik.handleChange}
         onBlur={formik.handleBlur}
             />
-              {formik.errors.Category ? (
-        <p className="alert alert-danger">{formik.errors.Category}</p>
-      ) : (
-        ""
-      )}
+             {formik.touched.Category&&formik.errors.Category ? <div className="alert alert-danger">{formik.errors.Category}</div> : ""}
             <br />
             <br />
             <FormControl fullWidth>
@@ -89,17 +102,18 @@ const Add = () => {
                 labelId="subCategory"
                 id="subCategory"
                 name="subCategory"
-                value={subCategory}
                 label="subCategory"
-                onChange={(e) => {
-                  onvalueChange(e);
-                }}
+                value={formik.values.subCategory}
+              onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
               >
                 <MenuItem value="Web">Web</MenuItem>
                 <MenuItem value="Mobile">Mobile</MenuItem>
                 <MenuItem value="DeskTop">DeskTop</MenuItem>
               </Select>
             </FormControl>
+            {formik.touched.subCategory&&formik.errors.subCategory ? <div className="alert alert-danger">{formik.errors.subCategory}</div> : ""}
+
             <br />
             <br />
             <FormControl fullWidth>
@@ -108,11 +122,11 @@ const Add = () => {
                 labelId="priority"
                 id="priority"
                 name="priority"
-                value={priority}
+              
                 label="priority"
-                onChange={(e) => {
-                  onvalueChange(e);
-                }}
+                value={formik.values.priority}
+              onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
               >
                 <MenuItem value="High">High</MenuItem>
                 <MenuItem value="Medium">Medium</MenuItem>
@@ -120,19 +134,20 @@ const Add = () => {
               </Select>
             </FormControl>
           </div>
+
           <br />
           <div className="col-md-6">
             <TextField
               fullWidth
-              value={Agent}
               id="Agent"
               name="Agent"
               label="Agent"
               variant="outlined"
-              onChange={(e) => {
-                onvalueChange(e);
-              }}
+              value={formik.values.Agent}
+              onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
             />
+             {formik.touched.Agent&&formik.errors.Agent ? <div className="alert alert-danger">{formik.errors.Agent}</div> : ""}
 
             <br />
             <br />
@@ -143,30 +158,32 @@ const Add = () => {
               name="Requester"
               label="Requester"
               variant="outlined"
-              value={Requester}
-              onChange={(e) => {
-                onvalueChange(e);
-              }}
+              value={formik.values.Requester}
+              onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
             />
+                         {formik.touched.Requester&&formik.errors.Requester? <div className="alert alert-danger">{formik.errors.Requester}</div> : ""}
+
             <br />
             <br />
             <TextField
               fullWidth
               id="SRNumber"
               label="SRNumber"
-              value={SRNumber}
               name="SRNumber"
               variant="outlined"
-              onChange={(e) => {
-                onvalueChange(e);
-              }}
+              value={formik.values.SRNumber}
+              onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
             />
+        {formik.touched.SRNumber&&formik.errors.SRNumber? <div className="alert alert-danger">{formik.errors.SRNumber}</div> : ""}
           </div>
         </div>
+
         <br />
         <div className="row">
           <Stack direction="row" spacing={2}>
-            <Button onClick={adduserFun} variant="contained" type="submit" >
+            <Button variant="contained" type="submit" >
               SUBMIT
             </Button>
 

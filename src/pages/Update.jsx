@@ -66,9 +66,6 @@ function Update() {
         <form>
           <div className="row">
             <FormControl>
-              <FormLabel id="demo-row-radio-buttons-group-label">
-                Edit
-              </FormLabel>
 
               <Typography>
                 <Box
@@ -79,6 +76,9 @@ function Update() {
                   noValidate
                   autoComplete="off"
                 >
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Edit
+                  </FormLabel>
                   <div className="row">
                     <div className="col-md-6 text-align-center">
                     <TextField
