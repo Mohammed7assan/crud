@@ -29,7 +29,6 @@ const Add = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
-
   const [user, setUser] = useState(intialvalue);
   const { Category, subCategory, priority, Agent, Requester, SRNumber } = user;
   const onvalueChange = (e) => {
@@ -38,7 +37,7 @@ const Add = () => {
 
   const adduserFun = (e) => {
     e.preventDefault();
-  
+
     axios.post(`http://localhost:5000/user`, user).then((data) => {
       console.log(data);
       toast.success("تم الأضافة بنجاح");
@@ -49,51 +48,56 @@ const Add = () => {
   async function formRegister(values) {
     console.log(values);
 
-    return axios.post("http://localhost:5000/user", values).then((data) => {
-      console.log(data);
-      toast.success("تم الأضافة بنجاح");
+    return axios
+      .post("http://localhost:5000/user", values)
+      .then((data) => {
+        console.log(data);
+        toast.success("تم الأضافة بنجاح");
         console.log(intialvalue);
         setUser(intialvalue);
-        navigate('/');
-      }).catch((err) => {
-        console.log(err);
-        setErrors(err.response.data.message)
+        navigate("/");
       })
-
+      .catch((err) => {
+        console.log(err);
+        setErrors(err.response.data.message);
+      });
   }
 
   const schema = Yup.object({
     Category: Yup.string().required("يرجى إدخال التصنيف"),
-     subCategory: Yup.string().required(" يرجى إدخال التصنيف الفرعى"),
-     Agent: Yup.string().required("يرجى إدخال العميل "),
-     SRNumber: Yup.string().required("يرجى ادخال رقم الطلب "),
+    subCategory: Yup.string().required(" يرجى إدخال التصنيف الفرعى"),
+    Agent: Yup.string().required("يرجى إدخال العميل "),
+    SRNumber: Yup.string().required("يرجى ادخال رقم الطلب "),
   });
   const formik = useFormik({
     initialValues: intialvalue,
     validationSchema: schema,
     onSubmit: (values) => {
-      formRegister(values)
-    }
-
+      formRegister(values);
+    },
   });
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
         <div className="row">
-          <FormLabel>Add</FormLabel>
+          <FormLabel id="demo-row-radio-buttons-group-label">"  Add</FormLabel>
         </div>
         <div className="row">
           <div className="col-md-6">
             <TextField
-            
+            fullWidth
               label="Category"
               id="Category"
               name="Category"
               value={formik.values.Category}
               onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
+              onBlur={formik.handleBlur}
             />
-             {formik.touched.Category&&formik.errors.Category ? <div className="alert alert-danger">{formik.errors.Category}</div> : ""}
+            {formik.touched.Category && formik.errors.Category ? (
+              <div className="alert alert-danger">{formik.errors.Category}</div>
+            ) : (
+              ""
+            )}
             <br />
             <br />
             <FormControl fullWidth>
@@ -104,15 +108,21 @@ const Add = () => {
                 name="subCategory"
                 label="subCategory"
                 value={formik.values.subCategory}
-              onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               >
                 <MenuItem value="Web">Web</MenuItem>
                 <MenuItem value="Mobile">Mobile</MenuItem>
                 <MenuItem value="DeskTop">DeskTop</MenuItem>
               </Select>
             </FormControl>
-            {formik.touched.subCategory&&formik.errors.subCategory ? <div className="alert alert-danger">{formik.errors.subCategory}</div> : ""}
+            {formik.touched.subCategory && formik.errors.subCategory ? (
+              <div className="alert alert-danger">
+                {formik.errors.subCategory}
+              </div>
+            ) : (
+              ""
+            )}
 
             <br />
             <br />
@@ -122,11 +132,10 @@ const Add = () => {
                 labelId="priority"
                 id="priority"
                 name="priority"
-              
                 label="priority"
                 value={formik.values.priority}
-              onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               >
                 <MenuItem value="High">High</MenuItem>
                 <MenuItem value="Medium">Medium</MenuItem>
@@ -145,9 +154,13 @@ const Add = () => {
               variant="outlined"
               value={formik.values.Agent}
               onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
+              onBlur={formik.handleBlur}
             />
-             {formik.touched.Agent&&formik.errors.Agent ? <div className="alert alert-danger">{formik.errors.Agent}</div> : ""}
+            {formik.touched.Agent && formik.errors.Agent ? (
+              <div className="alert alert-danger">{formik.errors.Agent}</div>
+            ) : (
+              ""
+            )}
 
             <br />
             <br />
@@ -160,9 +173,15 @@ const Add = () => {
               variant="outlined"
               value={formik.values.Requester}
               onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
+              onBlur={formik.handleBlur}
             />
-                         {formik.touched.Requester&&formik.errors.Requester? <div className="alert alert-danger">{formik.errors.Requester}</div> : ""}
+            {formik.touched.Requester && formik.errors.Requester ? (
+              <div className="alert alert-danger">
+                {formik.errors.Requester}
+              </div>
+            ) : (
+              ""
+            )}
 
             <br />
             <br />
@@ -174,16 +193,20 @@ const Add = () => {
               variant="outlined"
               value={formik.values.SRNumber}
               onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
+              onBlur={formik.handleBlur}
             />
-        {formik.touched.SRNumber&&formik.errors.SRNumber? <div className="alert alert-danger">{formik.errors.SRNumber}</div> : ""}
+            {formik.touched.SRNumber && formik.errors.SRNumber ? (
+              <div className="alert alert-danger">{formik.errors.SRNumber}</div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
 
         <br />
         <div className="row">
           <Stack direction="row" spacing={2}>
-            <Button variant="contained" type="submit" >
+            <Button variant="contained" type="submit">
               SUBMIT
             </Button>
 

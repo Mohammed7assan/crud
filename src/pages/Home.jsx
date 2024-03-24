@@ -28,6 +28,7 @@ import { deepOrange } from "@mui/material/colors";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Padding } from "@mui/icons-material";
+import Swal from "sweetalert2";
 const intialvalue = {
   Category: "",
   subCategory: "",
@@ -48,11 +49,20 @@ const Home = () => {
     setrecord(data.payload);
 
   }
-  async function deluserFun(id) {
-    let data = await dispatch(deluser(id));
-    getUsersFun();
-    console.log(data.payload);
-    toast.success("تم الحذف بنجاح");
+  async function deluserFun(row) {
+    Swal.fire({
+      title:`Are you sure to delete ${row.SRNumber} ?`,
+      showCancelButton:true,
+    }).then((res)=>{
+      if(res.isConfirmed)
+      {
+        let data =  dispatch(deluser(row.id));
+        console.log(data.payload);
+        toast.success("تم الحذف بنجاح");
+        
+      }
+      getUsersFun();
+    })
   }
   useEffect(() => {
     getUsersFun();
@@ -227,7 +237,7 @@ const Home = () => {
                   <Button
                     color="error"
                     variant="contained"
-                    onClick={() => deluserFun(row.id)}
+                    onClick={() => deluserFun(row)}
                   >
                     Delete
                   </Button>
